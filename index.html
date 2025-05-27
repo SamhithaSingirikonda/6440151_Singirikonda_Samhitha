@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="new-icon.png" type="image/png">
+  <title>Local Community Event Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #welcomeBanner {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #007BFF;
+    }
+    .highlight {
+      background-color: yellow;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    form {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    form input,
+    form select,
+    form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    form button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #0056b3;
+    }
+    output {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="help.html" target="_blank">Help</a></li>
+    </ul>
+  </nav>
+
+  <!-- Welcome Banner -->
+  <div id="welcomeBanner">
+    Welcome back, <span class="highlight">Resident!</span>
+    Don’t miss our <span style="color: red; font-weight: bold;">Special Offer</span> this weekend!
+  </div>
+
+  <!-- Main -->
+  <main>
+    <!-- Event Registration Form -->
+    <section id="events">
+      <h2>Event Registration</h2>
+      <form id="eventForm" onsubmit="handleSubmit(event)">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required autofocus>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="example@domain.com" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="text" id="phone" placeholder="Enter 10-digit number" onblur="validatePhone()" required>
+
+        <label for="date">Event Date</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="type">Event Type</label>
+        <select id="type" name="type" onchange="savePreference()" required>
+          <option value="">Select an event</option>
+          <option value="workshop">Workshop</option>
+          <option value="seminar">Seminar</option>
+          <option value="community">Community Gathering</option>
+        </select>
+
+        <button type="button" onclick="clearPreferences()">Clear Preferences</button>
+
+        <label for="eventFee">Select Event Fee</label>
+        <select id="eventFee" onchange="showFee()">
+          <option value="">--Choose an event--</option>
+          <option value="10">Workshop ($10)</option>
+          <option value="15">Seminar ($15)</option>
+          <option value="0">Community Gathering (Free)</option>
+        </select>
+        <p id="feeDisplay" class="highlight"></p>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Your message or questions..."></textarea>
+
+        <label for="feedback">Your Feedback</label>
+        <textarea id="feedback" onkeyup="countChars()" rows="4" placeholder="Type feedback..."></textarea>
+        <p>Characters: <span id="charCount">0</span></p>
+
+        <button type="submit" onclick="confirm('Are you sure you want to register?')">Register</button>
+        <output id="confirmation"></output>
+      </form>
+      Promo Image<br>
+      <img src="promo.jpg" alt="Promo Image" width="200" ondblclick="enlargeImage(this)" />
+      <br>
+      Promo video<br>
+      <video id="promoVideo" width="320" controls oncanplay="videoReadyMessage()">
+        <source src="event-promo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <p id="videoStatus"></p>
+
+      <button onclick="findLocation()">Find Nearby Events</button>
+      <p id="locationStatus"></p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>Get in touch with the local council for support and information.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Local City Council. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      document.getElementById('confirmation').textContent = `Thank you, ${name}, for registering!`;
+      event.target.reset();
+    }
+
+    function validatePhone() {
+      const phone = document.getElementById('phone').value;
+      if (!/^\d{10}$/.test(phone)) {
+        alert('Please enter a valid 10-digit phone number.');
+      }
+    }
+
+    function showFee() {
+      const fee = document.getElementById('eventFee').value;
+      document.getElementById('feeDisplay').textContent = fee ? `Selected Event Fee: $${fee}` : '';
+    }
+
+    function countChars() {
+      const len = document.getElementById('feedback').value.length;
+      document.getElementById('charCount').textContent = len;
+    }
+
+    function enlargeImage(img) {
+      img.style.width = img.style.width === "200px" ? "400px" : "200px";
+    }
+
+    function videoReadyMessage() {
+      document.getElementById('videoStatus').textContent = 'Video ready to play!';
+    }
+
+    window.onbeforeunload = function () {
+      const formNotEmpty = document.getElementById('name').value || document.getElementById('email').value;
+      if (formNotEmpty) {
+        return "Are you sure you want to leave? Your data will be lost.";
+      }
+    };
+
+    function savePreference() {
+      const selected = document.getElementById('type').value;
+      localStorage.setItem('preferredEvent', selected);
+    }
+
+    function loadPreference() {
+      const stored = localStorage.getItem('preferredEvent');
+      if (stored) {
+        document.getElementById('type').value = stored;
+      }
+    }
+
+    function clearPreferences() {
+      localStorage.clear();
+      sessionStorage.clear();
+      alert('Preferences cleared!');
+    }
+
+    function findLocation() {
+      const status = document.getElementById('locationStatus');
+      if (!navigator.geolocation) {
+        status.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      function success(pos) {
+        const crd = pos.coords;
+        status.textContent = `Your location: Lat ${crd.latitude}, Long ${crd.longitude}`;
+      }
+
+      function error(err) {
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            status.textContent = "Permission denied.";
+            break;
+          case err.TIMEOUT:
+            status.textContent = "Location request timed out.";
+            break;
+          default:
+            status.textContent = "An unknown error occurred.";
+        }
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 10000
+      });
+    }
+
+    window.onload = loadPreference;
+  </script>
+</body>
+</html>
