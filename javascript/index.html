@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Community Event Portal</title>
+</head>
+<body>
+  <div id="event-container"></div>
+  <select id="categoryFilter">
+    <option value="All">All</option>
+    <option value="Music">Music</option>
+    <option value="Art">Art</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="Search Events..." />
+  <form id="regForm">
+    <input type="text" name="username" placeholder="Name" />
+    <input type="email" name="email" placeholder="Email" />
+    <select name="event">
+      <option>Music Fest</option>
+      <option>Art Workshop</option>
+    </select>
+    <button type="submit" id="registerBtn">Register</button>
+  </form>
+  <div id="loading" style="display:none;">Loading...</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
